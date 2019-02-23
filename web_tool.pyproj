@@ -13,7 +13,7 @@
     <RootNamespace>web_tool</RootNamespace>
     <InterpreterId>Global|PythonCore|3.7</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>https://mp.weixin.qq.com/s/LmiVJ8Frxsp0Mbum6pFilA</CommandLineArguments>
+    <CommandLineArguments>https://play2048.co/</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
