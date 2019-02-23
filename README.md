@@ -1,7 +1,7 @@
 # web tool
 # 1.Save web page
 Simple python function that let you save a whole web page using Selenium and Pillow libraries.
-fork from https://github.com/netolyrg/save_webpage
+Fork from https://github.com/netolyrg/save_webpage
 
 ## Description
 
@@ -21,5 +21,5 @@ https://chromedriver.storage.googleapis.com/index.html?path=2.40/
 
 ## Usage
 examples:
-$ webpage2html -s http://gabrielecirulli.github.io/2048/ > 2048.html
+$ save_webpage http://gabrielecirulli.github.io/2048/
 
