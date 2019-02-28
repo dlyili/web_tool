@@ -13,7 +13,7 @@
     <RootNamespace>web_tool</RootNamespace>
     <InterpreterId>Global|PythonCore|3.7</InterpreterId>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>https://play2048.co/</CommandLineArguments>
+    <CommandLineArguments>https://play2048.co/ -f pdf -o test2 --simple</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

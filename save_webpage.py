@@ -10,12 +10,13 @@ from selenium.webdriver.chrome.options import Options
 
 from PIL import Image
 
-DEFAULT_IMAGE_FORMAT = "JPEG"
+DEFAULT_IMAGE_FORMAT = "PDF"
+#DEFAULT_IMAGE_FORMAT = "JPEG"
 DEFAULT_IMAGE_QUALITY = 80
 TIME_TO_WAIT = 6
 
 
-def save_webpage(url, file_name, scroll_sleep_time=1.0, options=None, cookies=None, **image_options):
+def save_webpage(url, file_name, simple, scroll_sleep_time=1.0, options=None, cookies=None, **image_options):
     """
 
     :param url: valid url
@@ -52,31 +53,21 @@ def save_webpage(url, file_name, scroll_sleep_time=1.0, options=None, cookies=No
         options=chrome_options
     )
 
-    device_pixel_ratio = driver.execute_script(device_pixel_ratio_js)
-
-    if device_pixel_ratio > 1:
-        old_width = driver.get_window_size()['width']
-        old_heidht = driver.get_window_size()['height']
-        driver.set_window_size(old_width//device_pixel_ratio, old_heidht//device_pixel_ratio)
-
     driver.get(url)
 
     # set cookies
     if cookies:
         for cookie in cookies:
             driver.add_cookie(cookie)
-
         # we need to 'activate' cookies
         driver.refresh()
-
+    
     driver.implicitly_wait(TIME_TO_WAIT)
-
+     # hide scrollbar coz it's lame
+    driver.execute_script("document.documentElement.style.overflow = 'hidden'")
+    device_pixel_ratio = driver.execute_script(device_pixel_ratio_js)
     inner_height = driver.execute_script(inner_height_js)
     scroll_height = driver.execute_script(scroll_height_js)
-
-    # hide scrollbar coz it's lame
-    driver.execute_script("document.documentElement.style.overflow = 'hidden'")
-
     actual_page_size = scroll_height*device_pixel_ratio
 
     slices = []
@@ -91,11 +82,15 @@ def save_webpage(url, file_name, scroll_sleep_time=1.0, options=None, cookies=No
     # create image
     screenshot = Image.new('RGB', (slices[0].size[0], int(actual_page_size)))
 
-    for i, img in enumerate(slices[:-1]):
-        screenshot.paste(img, (0, int(i * inner_height * device_pixel_ratio)))
+    if simple or len(slices) == 1 or scroll_height % inner_height == 0:
+        for i, img in enumerate(slices):
+            screenshot.paste(img, (0, int(i * inner_height * device_pixel_ratio)))
     else:
-        screenshot.paste(slices[-1], (0, int((scroll_height - inner_height) * device_pixel_ratio)))
-
+        for i, img in enumerate(slices[:-1]):
+            screenshot.paste(img, (0, int(i * inner_height * device_pixel_ratio)))
+        else:
+            screenshot.paste(slices[-1], (0, int((scroll_height - inner_height) * device_pixel_ratio)))
+        
     screenshot.save(file_name, **image_options)
     driver.quit()
 
@@ -104,10 +99,15 @@ def save_webpage(url, file_name, scroll_sleep_time=1.0, options=None, cookies=No
 def main():
     kwargs = {}
     parser = argparse.ArgumentParser()
-    parser.add_argument('-o', '--output', help = "save output to", default="output.jpg")
+    parser.add_argument('-o', '--output', help = "save output to file", default="output")
+    parser.add_argument('-f', '--format', help = "output file format", default="jpeg")
+    parser.add_argument('--simple', action = 'store_true', help = "simple save")
     parser.add_argument("url", help = "the website to store")
     args = parser.parse_args()
-    save_webpage(args.url, args.output)
+    file_path = args.output + "." + args.format
+    image_options = {"format": args.format}
+
+    save_webpage(args.url, file_path, args.simple, **image_options)
 
 if __name__ == '__main__':
     main()
