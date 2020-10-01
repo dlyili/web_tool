@@ -13,5 +13,6 @@ https://chromedriver.storage.googleapis.com/index.html?path=2.40/
 
 ## Usage
 examples:
-$ save_webpage http://gabrielecirulli.github.io/2048/
+$ save_webpage https://play2048.co/
+$ save_webpage https://play2048.co/ -f pdf -o test2 --simple
 
