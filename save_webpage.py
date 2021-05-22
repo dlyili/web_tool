@@ -13,7 +13,7 @@ from PIL import Image
 DEFAULT_IMAGE_FORMAT = "PDF"
 #DEFAULT_IMAGE_FORMAT = "JPEG"
 DEFAULT_IMAGE_QUALITY = 80
-TIME_TO_WAIT = 6
+TIME_TO_WAIT = 10
 
 
 def save_webpage(url, file_name, simple, scroll_sleep_time=1.0, options=None, cookies=None, **image_options):
